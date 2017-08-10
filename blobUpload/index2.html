@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>blobUpload</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    #uploaderFiles{
+        width: 200px;
+        height: 200px;
+        margin-top: 10px;
+        background: no-repeat center center;
+        background-size: cover;
+    }
+    .rotate90{
+        transform:rotate(90deg);
+        -webkit-transform:rotate(90deg);
+    }
+    .rotate180{
+        transform:rotate(180deg);
+        -webkit-transform:rotate(180deg);
+    }
+    .rotate270{
+        transform:rotate(270deg);
+        -webkit-transform:rotate(270deg);
+    }
+    </style>
+    <script src="https://cdn.bootcss.com/zepto/1.2.0/zepto.js"></script>
+    <script src="js/exif.js"></script>
+</head>
+<body>
+    <input id="uploaderInput" type="file" accept="image/*">
+    <div id="uploaderFiles"></div>
+    <div id="testMsg"></div>
+    <script type="text/javascript">
+        $(function(){
+            var $uploaderInput = $("#uploaderInput"),
+            $uploaderFiles = $("#uploaderFiles");
+
+            $uploaderInput.on("change", function(e){
+                var file = e.target.files[0];
+                var fileType = /^(image\/jpeg|image\/png)$/i;   
+                if (!fileType.test(file.type)) {  
+                    return "";  
+                }  
+
+                //获取ios下图片旋转方向角（exif.js插件）
+                var Orientation = null;
+                EXIF.getData(file, function() {  
+                    EXIF.getAllTags(this);  
+                    Orientation = EXIF.getTag(this, 'Orientation')
+                });  
+
+                var oReader = new FileReader();
+                oReader.readAsDataURL(file);
+                oReader.onload = function(e){
+                    rotateImg(Orientation,$uploaderFiles)
+                };
+                
+                var src, url = window.URL || window.webkitURL || window.mozURL;
+                if (url) {
+                    src = url.createObjectURL(file);
+                } else {
+                    src = e.target.result;
+                }
+                $uploaderFiles.attr("style","background-image:url("+src+")");
+            });
+        });
+
+        //ios下对图片预览容器做旋转处理 
+        //提示：传到后台的数据可附上旋转角度标记，便于后台处理
+        function rotateImg(Orientation,imgWrap){
+            if(Orientation != "" && Orientation != 1){  
+                switch(Orientation){  
+                    case 6://需要顺时针90度旋转  
+                        imgWrap.addClass("rotate90")
+                        break;  
+                    case 8://需要逆时针90度旋转  
+                        imgWrap.addClass("rotate270")
+                        break;  
+                    case 3://需要180度旋转  
+                        imgWrap.addClass("rotate180")
+                        break;  
+                }         
+            }
+            else{
+                imgWrap.removeClass("rotate90 rotate270 rotate180")
+            }
+        }
+    </script>
+</body>
+</html>

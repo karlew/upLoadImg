@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>blobtest</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    #uploaderFiles{
+        width: 200px;
+        height: 200px;
+        margin-top: 10px;
+        background: no-repeat center center;
+        background-size: cover;
+    }
+    </style>
+    <script src="https://cdn.bootcss.com/zepto/1.2.0/zepto.js"></script>
+</head>
+<body>
+    <input id="uploaderInput" type="file" accept="image/*">
+    <div id="uploaderFiles"></div>
+    <script type="text/javascript">
+        $(function(){
+            var $uploaderInput = $("#uploaderInput"),
+            $uploaderFiles = $("#uploaderFiles");
+
+            $uploaderInput.on("change", function(e){
+                var src, url = window.URL || window.webkitURL || window.mozURL;
+                var file = e.target.files[0];
+
+                if (url) {
+                    src = url.createObjectURL(file);
+                } else {
+                    src = e.target.result;
+                }
+
+                $uploaderFiles.attr("style","background-image:url("+src+")");
+            });
+        });
+    </script>
+</body>
+</html>

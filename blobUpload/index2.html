@@ -68,22 +68,19 @@
         });
 
         //ios下对图片预览容器做旋转处理 
-        //提示：传到后台的数据可附上旋转角度标记，便于后台处理
+        //提示：传到后台的数据可附上旋转角度标记，便于后台或画布处理
         function rotateImg(Orientation,imgWrap){
-            if(Orientation != "" && Orientation != 1 && typeof(Orientation) != "undefined"){  
-                switch(Orientation){  
-                    case 6://需要顺时针90度旋转  
-                        imgWrap.addClass("rotate90")
-                        break;  
-                    case 8://需要逆时针90度旋转  
-                        imgWrap.addClass("rotate270")
-                        break;  
-                    case 3://需要180度旋转  
-                        imgWrap.addClass("rotate180")
-                        break;  
-                }         
-            }
-            else{
+            if(Orientation==6){
+                //需要顺时针90度旋转  
+                imgWrap.addClass("rotate90")
+            }else if(Orientation==8){
+                //需要逆时针270度旋转  
+                imgWrap.addClass("rotate270")
+            }else if(Orientation==3){
+                //需要180度旋转  
+                imgWrap.addClass("rotate180")
+            }else{
+                //不作任何旋转处理
                 imgWrap.removeClass("rotate90 rotate270 rotate180")
             }
         }

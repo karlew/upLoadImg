@@ -70,7 +70,7 @@
         //ios下对图片预览容器做旋转处理 
         //提示：传到后台的数据可附上旋转角度标记，便于后台处理
         function rotateImg(Orientation,imgWrap){
-            if(Orientation != "" && Orientation != 1){  
+            if(Orientation != "" && Orientation != 1 && typeof(Orientation) != "undefined"){  
                 switch(Orientation){  
                     case 6://需要顺时针90度旋转  
                         imgWrap.addClass("rotate90")

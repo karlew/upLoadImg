@@ -33,12 +33,19 @@ $(function(){
 	    event.preventDefault(); 
     },false); 
 
+    var Orientation = null;
     $("#upLoadInput").change(function(e){
         var file = e.target.files[0];
         var fileType = /^(image\/jpeg|image\/png)$/i;   
         if (!fileType.test(file.type)) {  
             alert("请上传jpg或png格式图片")
         } else{
+            //获取ios下图片旋转方向角（exif.js插件）
+            EXIF.getData(file, function() {  
+                EXIF.getAllTags(this);  
+                Orientation = EXIF.getTag(this, 'Orientation')
+            });  
+
             var src, url = window.URL || window.webkitURL || window.mozURL;
 
             if (url) {
@@ -122,6 +129,16 @@ $(function(){
             canvas.changeScale = 0
             canvas.startRotate = 0
             canvas.changeRotate = 0
+
+            if(Orientation==6){
+                canvas.changeRotate = 90
+            }else if(Orientation==8){
+                canvas.changeRotate = 180
+            }else if(Orientation==3){
+                canvas.changeRotate = 270
+            }else{
+                canvas.changeRotate = 0
+            }
         }
         clearCanvas()
 

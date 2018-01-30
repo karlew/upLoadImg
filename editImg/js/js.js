@@ -133,9 +133,9 @@ $(function(){
             if(Orientation==6){
                 canvas.changeRotate = 90
             }else if(Orientation==8){
-                canvas.changeRotate = 180
-            }else if(Orientation==3){
                 canvas.changeRotate = 270
+            }else if(Orientation==3){
+                canvas.changeRotate = 180
             }else{
                 canvas.changeRotate = 0
             }
